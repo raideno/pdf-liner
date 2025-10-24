@@ -1,5 +1,7 @@
 import io
 
+import constants
+
 from reportlab.pdfgen.canvas import Canvas
 from PyPDF2 import PdfReader, PdfWriter
 
@@ -9,7 +11,8 @@ def add_lines_to_pdf(
     input_pdf_path: str,
     output_pdf_path: str,
     line_spacing: float,
-    line_opacity: float
+    line_opacity: float,
+    padding: bool
 ):
     """
     Add equally spaced horizontal lines to all pages of a PDF.
@@ -19,6 +22,7 @@ def add_lines_to_pdf(
         output_pdf_path: Path to save the output PDF file
         line_spacing: Space between lines in points (default: 30)
         line_opacity: Opacity of lines from 0.0 to 1.0 (default: 0.3)
+        padding: If True, adds a white page with lines after each page (default: False)
     """
     
     print(f"[pdf](input): {input_pdf_path}")
@@ -38,9 +42,9 @@ def add_lines_to_pdf(
         packet = io.BytesIO()
         canvas = Canvas(packet, pagesize=(page_width, page_height))
         
-        canvas.setStrokeColorRGB(0, 0, 0)
+        canvas.setStrokeColorRGB(*constants.DEFAULT_LINE_STROKE_COLOR)
         canvas.setStrokeAlpha(line_opacity)
-        canvas.setLineWidth(0.5)
+        canvas.setLineWidth(constants.DEFAULT_LINE_WIDTH)
         
         y_position = line_spacing
         while y_position < page_height:
@@ -57,6 +61,30 @@ def add_lines_to_pdf(
         page.merge_page(lines_page)
         
         writer.add_page(page)
+        
+        if padding:
+            blank_packet = io.BytesIO()
+            blank_canvas = Canvas(blank_packet, pagesize=(page_width, page_height))
+            
+            blank_canvas.setFillColorRGB(1, 1, 1)
+            blank_canvas.rect(0, 0, page_width, page_height, fill=True, stroke=False)
+            
+            blank_canvas.setStrokeColorRGB(*constants.DEFAULT_LINE_STROKE_COLOR)
+            blank_canvas.setStrokeAlpha(line_opacity)
+            blank_canvas.setLineWidth(constants.DEFAULT_LINE_WIDTH)
+            
+            y_position = line_spacing
+            while y_position < page_height:
+                blank_canvas.line(0, y_position, page_width, y_position)
+                y_position += line_spacing
+            
+            blank_canvas.save()
+            
+            blank_packet.seek(0)
+            blank_pdf = PdfReader(blank_packet)
+            blank_page = blank_pdf.pages[0]
+            
+            writer.add_page(blank_page)
     
     print(f"[pdf](output): {output_pdf_path}")
     with open(output_pdf_path, 'wb') as output_file:
@@ -68,10 +96,11 @@ def main():
     args = parse_args()
     
     add_lines_to_pdf(
-        args.input_pdf,
-        args.output_pdf,
-        args.line_spacing,
-        args.opacity
+        input_pdf_path=args.input_pdf,
+        output_pdf_path=args.output_pdf,
+        line_spacing=args.line_spacing,
+        line_opacity=args.opacity,
+        padding=args.padding
     )
 
 if __name__ == "__main__":

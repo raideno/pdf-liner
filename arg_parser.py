@@ -28,8 +28,16 @@ Tips:
     )
     
     parser.add_argument(
+        '-p', '--padding',
+        dest='padding',
+        action='store_true',
+        help='Adds a white page with lines after each page.'
+    )
+    
+    parser.add_argument(
         '-o', '--output',
         dest='output_pdf',
+        type=str,
         default=None,
         help='Path to the output PDF file (default: input_lined.pdf)'
     )
