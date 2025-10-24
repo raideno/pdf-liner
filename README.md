@@ -4,8 +4,11 @@ A simple Python script that adds equally spaced horizontal lines to PDF files, m
 
 ## Installation
 
-1. Install the required dependencies:
+1. Clone the repository.
 
+2. Create a virtual python environment if needed.
+
+3. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
