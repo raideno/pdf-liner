@@ -12,7 +12,8 @@ def add_lines_to_pdf(
     output_pdf_path: str,
     line_spacing: float,
     line_opacity: float,
-    padding: bool
+    padding: bool,
+    enhance_bottom_lines: int
 ):
     """
     Add equally spaced horizontal lines to all pages of a PDF.
@@ -23,6 +24,7 @@ def add_lines_to_pdf(
         line_spacing: Space between lines in points (default: 30)
         line_opacity: Opacity of lines from 0.0 to 1.0 (default: 0.3)
         padding: If True, adds a white page with lines after each page (default: False)
+        enhance_bottom_lines: Number of bottom lines to make thicker/darker to prevent printer fade
     """
     
     print(f"[pdf](input): {input_pdf_path}")
@@ -46,10 +48,24 @@ def add_lines_to_pdf(
         canvas.setStrokeAlpha(line_opacity)
         canvas.setLineWidth(constants.DEFAULT_LINE_WIDTH)
         
+        line_positions = []
         y_position = line_spacing
         while y_position < page_height:
-            canvas.line(0, y_position, page_width, y_position)
+            line_positions.append(y_position)
             y_position += line_spacing
+        
+        for i, y_pos in enumerate(line_positions):
+            is_bottom_line = i < enhance_bottom_lines
+            
+            if is_bottom_line and enhance_bottom_lines > 0:
+                enhancement_factor = 1.5 + (enhance_bottom_lines - i) * 0.3
+                canvas.setLineWidth(constants.DEFAULT_LINE_WIDTH * enhancement_factor)
+                canvas.setStrokeAlpha(min(1.0, line_opacity * enhancement_factor))
+            else:
+                canvas.setLineWidth(constants.DEFAULT_LINE_WIDTH)
+                canvas.setStrokeAlpha(line_opacity)
+            
+            canvas.line(0, y_pos, page_width, y_pos)
         
         canvas.save()
         
@@ -73,10 +89,24 @@ def add_lines_to_pdf(
             blank_canvas.setStrokeAlpha(line_opacity)
             blank_canvas.setLineWidth(constants.DEFAULT_LINE_WIDTH)
             
+            line_positions = []
             y_position = line_spacing
             while y_position < page_height:
-                blank_canvas.line(0, y_position, page_width, y_position)
+                line_positions.append(y_position)
                 y_position += line_spacing
+            
+            for i, y_pos in enumerate(line_positions):
+                is_bottom_line = i < enhance_bottom_lines
+                
+                if is_bottom_line and enhance_bottom_lines > 0:
+                    enhancement_factor = 1.5 + (enhance_bottom_lines - i) * 0.3
+                    blank_canvas.setLineWidth(constants.DEFAULT_LINE_WIDTH * enhancement_factor)
+                    blank_canvas.setStrokeAlpha(min(1.0, line_opacity * enhancement_factor))
+                else:
+                    blank_canvas.setLineWidth(constants.DEFAULT_LINE_WIDTH)
+                    blank_canvas.setStrokeAlpha(line_opacity)
+                
+                blank_canvas.line(0, y_pos, page_width, y_pos)
             
             blank_canvas.save()
             
@@ -100,7 +130,8 @@ def main():
         output_pdf_path=args.output_pdf,
         line_spacing=args.line_spacing,
         line_opacity=args.opacity,
-        padding=args.padding
+        padding=args.padding,
+        enhance_bottom_lines=args.enhance_bottom_lines
     )
 
 if __name__ == "__main__":

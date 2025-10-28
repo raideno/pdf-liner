@@ -40,6 +40,18 @@ python pdf_liner.py input.pdf --output output.pdf --line-spacing 25 --opacity 0.
 - `-s` or `--line-spacing`: Space between lines in points (default: 20)
 - `-a` or `--opacity`: Line opacity from 0.0 to 1.0 (default: 0.25)
 
+### Enhance Bottom Lines for Better Printing
+
+Some printers tend to fade lines at the bottom of pages. Use the `-e` option to make the bottom lines thicker and darker:
+
+```bash
+python pdf_liner.py input.pdf -e 5
+# or
+python pdf_liner.py input.pdf --enhance-bottom-lines 5
+```
+
+- `-e` or `--enhance-bottom-lines`: Number of bottom lines to enhance (default: 3, set to 0 to disable)
+
 ### Get Help
 
 ```bash
@@ -54,6 +66,8 @@ python pdf_liner.py --help
 - **-o, --output** (optional) - Path for the output file (default: `input_lined.pdf`)
 - **-s, --line-spacing** (optional) - Space between lines in points (default: 20)
 - **-a, --opacity** (optional) - Line opacity from 0.0 to 1.0 (default: 0.25)
+- **-e, --enhance-bottom-lines** (optional) - Number of bottom lines to enhance for better printing (default: 3)
+- **-p, --padding** (optional) - Adds a white page with lines after each page
 
 ## Requirements
 

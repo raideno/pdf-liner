@@ -2,6 +2,7 @@ import argparse
 
 DEFAULT_LINE_SPACING = 20
 DEFAULT_LINE_OPACITY = 0.25
+DEFAULT_ENHANCE_BOTTOM_LINES = 3
 
 def create_parser():
     parser = argparse.ArgumentParser(
@@ -58,6 +59,14 @@ Tips:
         help=f'Line opacity from 0.0 (invisible) to 1.0 (solid) (default: {DEFAULT_LINE_OPACITY})'
     )
     
+    parser.add_argument(
+        '-e', '--enhance-bottom-lines',
+        dest='enhance_bottom_lines',
+        type=int,
+        default=DEFAULT_ENHANCE_BOTTOM_LINES,
+        help=f'Number of bottom lines to enhance (thicker/darker) to prevent printer fade (default: {DEFAULT_ENHANCE_BOTTOM_LINES}, 0 to disable)'
+    )
+    
     return parser
 
 def parse_args():
@@ -69,6 +78,9 @@ def parse_args():
     
     if args.line_spacing <= 0:
         parser.error(f'Line spacing must be positive, got: {args.line_spacing}')
+    
+    if args.enhance_bottom_lines < 0:
+        parser.error(f'Enhance bottom lines must be non-negative, got: {args.enhance_bottom_lines}')
     
     if args.output_pdf is None:
         args.output_pdf = args.input_pdf.rsplit('.', 1)[0] + '_lined.pdf'
