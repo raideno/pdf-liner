@@ -69,6 +69,14 @@ pipx ensurepath
 pipx install .
 ```
 
+To re-install use
+```bash
+pipx uninstall pdf-liner
+pipx install .
+# or
+pipx reinstall .
+```
+
 Now you can run `pdf-liner` from the terminal from anywhere.
 
 ## Parameters

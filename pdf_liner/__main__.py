@@ -1,6 +1,6 @@
 import io
 
-import pdf_liner.constants
+import pdf_liner.constants as constants
 
 from reportlab.pdfgen.canvas import Canvas
 from PyPDF2 import PdfReader, PdfWriter
