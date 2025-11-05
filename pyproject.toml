@@ -1,0 +1,23 @@
+[project]
+name = "pdf-liner"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "raideno56",email = "nadirkichou@hotmail.fr"}
+]
+readme = "README.md"
+requires-python = ">=3.9,<4"
+dependencies = [
+    "reportlab (>=4.4.4,<5.0.0)",
+    "pypdf2 (>=3.0.1,<4.0.0)"
+]
+
+[tool.poetry.dependencies]
+
+
+[tool.poetry.scripts]
+pdf-liner = "pdf_liner.__main__:main"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

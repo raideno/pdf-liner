@@ -1,11 +1,11 @@
 import io
 
-import constants
+import pdf_liner.constants
 
 from reportlab.pdfgen.canvas import Canvas
 from PyPDF2 import PdfReader, PdfWriter
 
-from arg_parser import parse_args
+from pdf_liner.arg_parser import parse_args
 
 def add_lines_to_pdf(
     input_pdf_path: str,

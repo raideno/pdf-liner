@@ -60,6 +60,17 @@ python pdf_liner.py -h
 python pdf_liner.py --help
 ```
 
+### Install Globally
+
+Make sure you have [pipx](https://github.com/pypa/pipx) installed.
+
+```bash
+pipx ensurepath
+pipx install .
+```
+
+Now you can run `pdf-liner` from the terminal from anywhere.
+
 ## Parameters
 
 - **input_pdf** (required) - Path to the input PDF file
